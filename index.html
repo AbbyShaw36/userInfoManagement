@@ -10,7 +10,43 @@
 	<header id="header">
 		<h1>用户信息管理系统</h1>
 	</header>
-	<div id="main"></div>
+	<div id="main">
+		<div id="formBox">
+			<h2>填写用户信息：</h2>
+			<div id="nameBox">
+				<label>
+					<span>姓名：</span>
+					<input type="text" name="name">
+				</label>
+			</div>
+			<div id="ageBox">
+				<label>
+					<span>年龄：</span>
+					<input type="text" name="age">
+				</label>
+			</div>
+			<div id="sexBox">
+				<label>
+					<span>性别：</span>
+					<select>
+						<option></option>
+						<option>男</option>
+						<option>女</option>
+					</select>
+				</label>
+			</div>
+			<div id="formBtnBox">
+				<input type="button" value="提交">
+			</div>
+		</div>
+		<div id="tableBox">
+			<h2>用户信息列表：</h2>
+			<div id="infoTable">
+				信息加载中...
+			</div>
+		</div>
+	</div>
+	<script src="js/jquery-2.2.3.min.js"></script>
 	<script src="js/index.js"></script>
 </body>
 </html>
