@@ -70,7 +70,7 @@ var InfoList = React.createClass({
 	componentWillUnmount : function() {
 		this.serverRequest.abort();
 	},
-	handleClick : function(index) {
+	handleDelete : function(index) {
 		var data = [];
 
 		delete this.state.data[index];
@@ -83,21 +83,43 @@ var InfoList = React.createClass({
 			data : data
 		});
 	},
+	handleUpdate : function(index,result) {
+		var that = this;
+		update(result,function(newData) {
+			var rows = [];
+
+			that.state.data.forEach(function(result,index) {
+				rows.push(result);
+			});
+
+			rows[index] = newData;
+
+			that.setState({
+				data : rows
+			});
+		});
+	},
 	render : function() {
 		var data = this.state.data;
 		var rows = [];
 		var o = this;
 
 		data.forEach(function(result,index) {
+			var sex = "";
+			if (result.sex === "1") {
+				sex = "男";
+			} else if (result.sex === "2") {
+				sex = "女";
+			}
 			rows.push(
 				<tr>
 					<td>{index + 1}</td>
 					<td>{result.name}</td>
 					<td>{result.age}</td>
-					<td>{result.sex}</td>
+					<td>{sex}</td>
 					<td>
-						<a href="#">修改</a>
-						<a href="#" onClick={o.handleClick.bind(this,index)}>删除</a>
+						<a href="#" onClick={o.handleUpdate.bind(this,index,result)}>修改</a>
+						<a href="#" onClick={o.handleDelete.bind(this,index)}>删除</a>
 					</td>
 				</tr>
 			);
@@ -115,3 +137,101 @@ ReactDOM.render(
 	<InfoTable />,
 	document.getElementById('infoTable')
 );
+
+function update(result,cb) {
+	var UpdateBox = React.createClass({
+		getInitialState : function() {
+			return {
+				name : result.name,
+				age : result.age,
+				sex : result.sex,
+			}
+		},
+		handleCancle : function() {
+			$("#popupsBox").html("");
+		},
+		handleSave : function() {
+			var name = this.state.name;
+			var age = this.state.age;
+			var sex = this.state.sex;
+
+			if (!name) {
+				alert("姓名不能为空！");
+				return;
+			}
+
+			if (!age) {
+				alert("年龄不能为空！");
+				return;
+			}
+
+			if (!sex) {
+				alert("性别不能为空！");
+				return;
+			}
+
+			cb({
+				name : name,
+				age : age,
+				sex : sex
+			});
+
+			$("#popupsBox").html("");
+		},
+		changeName : function(ev) {
+			this.setState({
+				name : ev.target.value
+			});
+		},
+		chagneAge :function(ev) {
+			this.setState({
+				age : ev.target.value
+			});
+		},
+		chagneSex : function(ev) {
+			this.setState({
+				sex : ev.target.value
+			})
+		},
+		render: function() {
+			return (
+				<div>
+					<div className="shadow"></div>
+					<div className="pop-ups" id="updateBox">
+						<div>
+							<label>
+								<span>姓名</span>
+								<input type="text" name="name" value={this.state.name} onChange={this.changeName}/>
+							</label>
+						</div>
+						<div>
+							<label>
+								<span>年龄</span>
+								<input type="text" name="age" value={this.state.age} onChange={this.chagneAge}/>
+							</label>
+						</div>
+						<div>
+							<label>
+								<span>性别</span>
+								<select name="sex" value={this.state.sex} onChange={this.chagneSex}>
+									<option></option>
+									<option value="1">男</option>
+									<option value="2">女</option>
+								</select>
+							</label>
+						</div>
+						<div className="btnBox">
+							<input type="button" value="保存" onClick={this.handleSave}/>
+							<input type="button" value="取消" onClick={this.handleCancle} />
+						</div>
+					</div>
+				</div>
+			);
+		}
+	});
+
+	ReactDOM.render(
+		<UpdateBox />,
+		document.getElementById("popupsBox")
+	);
+}
