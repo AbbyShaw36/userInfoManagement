@@ -1,0 +1,11 @@
+{
+	"name" : "userInfoManagement",
+	"version" : "0.0.1",
+	"dependencies" : {
+		"http" : "latest",
+		"fs" : "latest",
+		"url" : "latest",
+		"path" : "latest",
+		"mime" : "latest"
+	}
+}
